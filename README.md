@@ -25,6 +25,9 @@ This repo documents my journey to learn SQL from beginner to advanced utilizing 
 19. [Concept 19: Stored Procedures](#concept-19-stored-procedures)
 20. [Concept 20: Window Functions](#concept-20-window-functions)
 21. [Concept 21: Common Table Expressions (CTEs)](#concept-21-common-table-expressions-ctes)
+22. [Concept 22: Advanced Joins - CROSS JOIN](#concept-22-advanced-joins---cross-join)
+23. [Concept 23: Advanced Joins - SELF JOIN](#concept-23-advanced-joins---self-join)
+24. [Concept 24: Pivot Tables](#concept-24-pivot-tables)
 
 ## Concepts Covered
 
@@ -922,12 +925,127 @@ Validity of User's Answer:
 ☐ Almost Correct
 
 ---
+### Concept 22: Advanced Joins - CROSS JOIN
 
+**Overview**:  
+A CROSS JOIN returns the Cartesian product of the two tables involved in the join. This means that it will return all possible combinations of rows from the two tables.
+
+**Syntax**:
+```sql
+SELECT column1, column2, ...
+FROM table1
+CROSS JOIN table2;
+```
+
+**Practice Question**:  
+Write a SQL query to perform a CROSS JOIN between the 'employees' table and the 'departments' table, selecting the 'employee_id' from 'employees' and 'department_name' from 'departments'.
+
+**User's Answer**:
+```sql
+select employees.employee_id, departments.department_name from employees cross join departments;
+```
+
+**Provided Answer**:
+```sql
+SELECT employees.employee_id, departments.department_name
+FROM employees
+CROSS JOIN departments;
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Concept 23: Advanced Joins - SELF JOIN
+
+**Overview**:  
+A SELF JOIN is a regular join but the table is joined with itself. It is useful when you need to compare rows within the same table.
+
+**Syntax**:
+```sql
+SELECT a.column1, b.column1, ...
+FROM table a, table b
+WHERE condition;
+```
+
+**Practice Question**:  
+Write a SQL query to perform a SELF JOIN on the 'employees' table to find pairs of employees who share the same manager. Select the 'employee_id' and 'manager_id' for each pair.
+
+**User's Answer**:
+```sql
+select a.employee_id as employee1, b.employee_id as employee2 from employees a , employees b where a.manager_id = b.employee_id;
+```
+
+**Provided Answer**:
+```sql
+SELECT a.employee_id AS employee1, b.employee_id AS employee2
+FROM employees a
+JOIN employees b ON a.manager_id = b.employee_id;
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Concept 24: Pivot Tables
+
+**Overview**:  
+A Pivot Table is a data summarization tool that is used to automatically sort, count, total, or average the data stored in one table or dataset. Pivot tables are useful for analyzing and summarizing large datasets.
+
+**Syntax**:
+```sql
+SELECT ...
+FROM ...
+PIVOT (
+    aggregate_function(column)
+    FOR column IN (value1, value2, ...))
+AS alias;
+```
+
+**Practice Question**:  
+Write a SQL query to create a Pivot Table that summarizes the average salary for each department in the 'employees' table, and pivot the departments 101, 102, and 103.
+
+**User's Answer**:
+```sql
+select * from ( select employee_id, department_id, salary from employees ) as t1 pivot (avg(salary) for department_id in (101, 102, 103)) as pt;
+```
+
+**Provided Answer**:
+```sql
+SELECT * 
+FROM (
+    SELECT employee_id, department_id, salary 
+    FROM employees
+) AS t1 
+PIVOT (
+    AVG(salary) 
+    FOR department_id IN ([101], [102], [103])
+) AS pt;
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+
+
+
+---
 ## User Inquiries
 
-### Concept 18: Indexes
-
-**User Inquiry**: Can you explain a little bit more how indexes work? Are indexes similar to hash tables?
+### Inquiry 1: Can you explain a little bit more how indexes work? Are indexes similar to hash tables?
 
 **Response to Inquiry**:
 
@@ -969,9 +1087,7 @@ In summary, while both indexes and hash tables aim to improve data retrieval tim
 
 ---
 
-### Concept 18: Indexes
-
-**User Inquiry**: Why use a unique index? In what situations do we opt for a unique index vs a regular index?
+### Inquiry 2: Why use a unique index? In what situations do we opt for a unique index vs a regular index?
 
 **Response to Inquiry**:
 
@@ -1041,9 +1157,7 @@ CREATE INDEX idx_department ON employees(department_id);
 
 ---
 
-### Concept 17: SQL Views
-
-**User Inquiry**: If I were to query a view, does the underlying query that was used to create the view run when I'm querying the view?
+### Inquiry 3: If I were to query a view, does the underlying query that was used to create the view run when I'm querying the view?
 
 **Response to Inquiry**:
 
@@ -1093,9 +1207,7 @@ Yes, when you query a view, the underlying query that was used to create the vie
 
 ---
 
-### Concept 16: SQL Functions
-
-**User Inquiry**: What's the difference between `NOW()` and `CURDATE()`?
+### Inquiry 4: What's the difference between `NOW()` and `CURDATE()`?
 
 **Response to Inquiry**:
 
@@ -1147,48 +1259,95 @@ SELECT CURDATE();
 
 ---
 
-## Remaining Concepts to Cover
+### Inquiry 5: What is the point of comparing rows within the same table? Is this a way to check if the table has duplicate rows? Isn't it more efficient to just use DISTINCT?
 
-1. **Transactions**
+**Response to Inquiry**:
+
+Comparing rows within the same table, known as a SELF JOIN, serves several purposes beyond merely checking for duplicate rows. Here are some common use cases and explanations:
+
+### Common Use Cases for SELF JOIN
+
+1. **Hierarchical Data**:
+   - **Purpose**: To represent and query hierarchical relationships within the same table, such as an organizational chart where employees report to managers.
+   - **Example**: Finding all employees who report to a specific manager.
+     ```sql
+     SELECT a.employee_id AS employee, b.employee_id AS manager
+     FROM employees a
+     JOIN employees b ON a.manager_id = b.employee_id;
+     ```
+
+2. **Finding Pairs**:
+   - **Purpose**: To find pairs of rows that meet a certain condition, such as employees who share the same manager.
+   - **Example**: Finding pairs of employees with the same manager.
+     ```sql
+     SELECT a.employee_id AS employee1, b.employee_id AS employee2
+     FROM employees a, employees b
+     WHERE a.manager_id = b.manager_id;
+     ```
+
+3. **Comparing Rows**:
+   - **Purpose**: To compare rows within the same table to find differences or similarities based on certain criteria.
+   - **Example**: Comparing salaries of employees within the same department.
+     ```sql
+     SELECT a.employee_id AS employee1, b.employee_id AS employee2, a.salary - b.salary AS salary_difference
+     FROM employees a, employees b
+     WHERE a.department_id = b.department_id AND a.employee_id <> b.employee_id;
+     ```
+
+4. **Detecting Cycles**:
+   - **Purpose**: To detect cycles in hierarchical data, which can be crucial in certain applications like dependency graphs.
+   - **Example**: Detecting circular references in organizational hierarchy.
+     ```sql
+     SELECT a.employee_id, b.employee_id
+     FROM employees a
+     JOIN employees b ON a.manager_id = b.employee_id
+     WHERE a.employee_id = b.manager_id;
+     ```
+
+### Checking for Duplicate Rows
+
+While a SELF JOIN can be used to check for duplicate rows, it is often more efficient to use the `DISTINCT` keyword or aggregate functions like `COUNT()` in conjunction with the `GROUP BY` clause. Here are some examples:
+
+1. **Using DISTINCT**:
+   - **Purpose**: To remove duplicate rows from the result set.
+   - **Example**:
+     ```sql
+     SELECT DISTINCT column1, column2, ...
+     FROM table_name;
+     ```
+
+2. **Using GROUP BY and HAVING**:
+   - **Purpose**: To find duplicate rows based on specific columns.
+   - **Example**:
+     ```sql
+     SELECT column1, column2, COUNT(*)
+     FROM table_name
+     GROUP BY column1, column2
+     HAVING COUNT(*) > 1;
+     ```
+
+### Summary
+
+- **SELF JOIN**: Used to compare rows within the same table for hierarchical data, finding pairs, comparing values, and detecting cycles.
+- **DISTINCT**: Used to remove duplicate rows from the result set.
+- **GROUP BY and HAVING**: Used to find and handle duplicate rows efficiently.
+
+While SELF JOINs are powerful for specific use cases, using `DISTINCT` or `GROUP BY` with `HAVING` is more efficient for handling duplicate rows.
+
+---
+
+### Next Concepts to Cover
+
+1. **Temporary Tables**
    - Overview
    - Syntax
    - Practice Question
 
-2. **Triggers**
-   - Overview
-   - Syntax
-   - Practice Question
-
-3. **User-Defined Functions**
-   - Overview
-   - Syntax
-   - Practice Question
-
-4. **Advanced Joins**
-   - CROSS JOIN
-     - Overview
-     - Syntax
-     - Practice Question
-   - SELF JOIN
-     - Overview
-     - Syntax
-     - Practice Question
-
-5. **Pivot Tables**
-   - Overview
-   - Syntax
-   - Practice Question
-
-6. **Temporary Tables**
-   - Overview
-   - Syntax
-   - Practice Question
-
-7. **Data Types**
+2. **Data Types**
    - Overview
    - Practice Question
 
-8. **Advanced Query Techniques**
+3. **Advanced Query Techniques**
    - EXISTS and NOT EXISTS
      - Overview
      - Syntax
@@ -1202,11 +1361,11 @@ SELECT CURDATE();
      - Syntax
      - Practice Question
 
-9. **Performance Tuning**
+4. **Performance Tuning**
    - Overview
    - Practice Question
 
-10. **Database Design**
+5. **Database Design**
     - Normalization and Denormalization
       - Overview
       - Practice Question
@@ -1214,7 +1373,7 @@ SELECT CURDATE();
       - Overview
       - Practice Question
 
-11. **Security**
+6. **Security**
     - GRANT and REVOKE Privileges
       - Overview
       - Syntax
@@ -1226,18 +1385,33 @@ SELECT CURDATE();
       - Overview
       - Practice Question
 
-12. **Backup and Restore**
+7. **Backup and Restore**
     - Overview
     - Practice Question
 
-13. **JSON and XML Data**
+8. **JSON and XML Data**
     - Storing and Querying JSON and XML Data
       - Overview
       - Syntax
       - Practice Question
 
-14. **Case Studies and Real-World Scenarios**
+9. **Case Studies and Real-World Scenarios**
     - Practical Applications
     - Complex Query Examples
+
+10. **Transactions**
+   - Overview
+   - Syntax
+   - Practice Question
+
+11. **Triggers**
+   - Overview
+   - Syntax
+   - Practice Question
+
+12. **User-Defined Functions**
+   - Overview
+   - Syntax
+   - Practice Question
 
 ---
