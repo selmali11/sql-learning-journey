@@ -28,6 +28,8 @@ This repo documents my journey to learn SQL from beginner to advanced utilizing 
 22. [Concept 22: Advanced Joins - CROSS JOIN](#concept-22-advanced-joins---cross-join)
 23. [Concept 23: Advanced Joins - SELF JOIN](#concept-23-advanced-joins---self-join)
 24. [Concept 24: Pivot Tables](#concept-24-pivot-tables)
+25. [Concept 25: Temporary Tables](#concept-25-temporary-tables)
+26. [Concept 26: Data Types](#concept-26-data-types)
 
 ## Concepts Covered
 
