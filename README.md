@@ -1744,7 +1744,7 @@ CREATE TABLE table_name (
 
 ---
 
-### Inquiry 6: Can I create an index on `department_id` and use a SELECT statement in the same query?
+### Inquiry 7: Can I create an index on `department_id` and use a SELECT statement in the same query?
 
 **Response to Inquiry**:
 
