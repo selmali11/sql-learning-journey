@@ -1039,7 +1039,106 @@ Validity of User's Answer:
 
 ---
 
+### Concept 25: Temporary Tables
 
+**Overview**:  
+Temporary tables are used to store temporary data. They are similar to regular tables but are stored in the `tempdb` database. Temporary tables are automatically dropped when they go out of scope, such as when a session ends or a stored procedure finishes execution.
+
+**Syntax**:
+```sql
+CREATE TEMPORARY TABLE temp_table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+
+**Practice Question**:  
+Write a SQL query to create a temporary table named 'temp_employees' with columns 'id' (integer) and 'name' (varchar).
+
+**User's Answer**:
+```sql
+CREATE TEMPORARY TABLE temp_employees (
+    id integer,
+    name varchar (255)
+);
+```
+
+**Provided Answer**:
+```sql
+CREATE TEMPORARY TABLE temp_employees (
+    id INTEGER,
+    name VARCHAR (255)
+);
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Concept 26: Data Types
+
+**Overview**:  
+Data types define the type of data that can be stored in a column. Choosing the right data type is essential for ensuring data integrity, optimizing performance, and minimizing storage requirements. Common data types include numeric, date/time, and string types.
+
+**Common Data Types**:
+
+1. **Numeric Data Types**:
+   - `INT` or `INTEGER`: A whole number.
+   - `FLOAT`: A floating-point number.
+   - `DECIMAL`: A fixed-point number.
+
+2. **Date/Time Data Types**:
+   - `DATE`: A date value (e.g., `YYYY-MM-DD`).
+   - `TIME`: A time value (e.g., `HH:MM:SS`).
+   - `DATETIME`: A date and time value.
+
+3. **String Data Types**:
+   - `CHAR`: A fixed-length string.
+   - `VARCHAR`: A variable-length string.
+   - `TEXT`: A large amount of text.
+
+**Syntax**:
+```sql
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+
+**Practice Question**:  
+Write a SQL query to create a table named 'products' with columns 'product_id' (integer), 'product_name' (varchar), 'price' (decimal), and 'created_at' (datetime).
+
+**User's Answer**:
+```sql
+CREATE TABLE products (
+    product_id INTEGER,
+    product_name VARCHAR(255),
+    price DECIMAL,
+    created_at DATETIME
+);
+```
+
+**Provided Answer**:
+```sql
+CREATE TABLE products (
+    product_id INTEGER,
+    product_name VARCHAR(255),
+    price DECIMAL,
+    created_at DATETIME
+);
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
 
 
 ---
@@ -1336,18 +1435,141 @@ While SELF JOINs are powerful for specific use cases, using `DISTINCT` or `GROUP
 
 ---
 
-### Next Concepts to Cover
+### Inquiry 6: What is the difference between a temp table, a view, a stored procedure, a cached table, and an actual table?
 
-1. **Temporary Tables**
-   - Overview
-   - Syntax
-   - Practice Question
+**Response to Inquiry**:
 
-2. **Data Types**
-   - Overview
-   - Practice Question
+Each of these database objects serves a different purpose and has unique characteristics. Here's a detailed comparison:
 
-3. **Advanced Query Techniques**
+### Temporary Table
+
+**Purpose**:  
+To store temporary data that is needed only for the duration of a session or a specific task.
+
+**Characteristics**:
+- **Scope**: Exists only for the duration of a session or a stored procedure.
+- **Storage**: Stored in the `tempdb` database.
+- **Usage**: Useful for intermediate data storage during complex queries or batch processing.
+- **Lifetime**: Automatically dropped when the session ends or the stored procedure completes.
+
+**Syntax**:
+```sql
+CREATE TEMPORARY TABLE temp_table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+
+### View
+
+**Purpose**:  
+To present a virtual table based on the result set of an SQL query. It does not store data itself but provides a way to simplify complex queries.
+
+**Characteristics**:
+- **Scope**: Exists permanently in the database until explicitly dropped.
+- **Storage**: Does not store data; only the query definition is stored.
+- **Usage**: Useful for simplifying complex queries, providing a layer of abstraction, and restricting data access.
+- **Lifetime**: Exists until explicitly dropped.
+
+**Syntax**:
+```sql
+CREATE VIEW view_name AS
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+```
+
+### Stored Procedure
+
+**Purpose**:  
+To encapsulate a set of SQL statements for reuse. Stored procedures can perform operations such as querying, updating data, and implementing business logic.
+
+**Characteristics**:
+- **Scope**: Exists permanently in the database until explicitly dropped.
+- **Storage**: Stores the SQL code and logic.
+- **Usage**: Useful for encapsulating complex logic, performing batch operations, and executing dynamic SQL.
+- **Lifetime**: Exists until explicitly dropped.
+
+**Syntax**:
+```sql
+CREATE PROCEDURE procedure_name
+AS
+BEGIN
+    -- SQL statements
+END;
+```
+
+### Cached Table
+
+**Purpose**:  
+To store frequently accessed data in memory to improve query performance. Cached tables are often used in caching mechanisms to reduce database load.
+
+**Characteristics**:
+- **Scope**: Exists in memory for a specified duration or until explicitly cleared.
+- **Storage**: Stored in memory for fast access.
+- **Usage**: Useful for improving performance by reducing database calls for frequently accessed data.
+- **Lifetime**: Exists until the cache is invalidated or cleared.
+
+**Note**: Cached tables are often managed by application code or caching frameworks, rather than SQL commands.
+
+### Actual Table
+
+**Purpose**:  
+To store persistent data in the database. Actual tables are the primary means of data storage in relational databases.
+
+**Characteristics**:
+- **Scope**: Exists permanently in the database until explicitly dropped.
+- **Storage**: Stores data persistently on disk.
+- **Usage**: Useful for storing data that needs to be queried, updated, and maintained over time.
+- **Lifetime**: Exists until explicitly dropped.
+
+**Syntax**:
+```sql
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+
+### Summary of Differences
+
+1. **Temporary Table**:
+   - **Scope**: Temporary (session-specific or procedure-specific).
+   - **Storage**: `tempdb` database.
+   - **Usage**: Intermediate data storage.
+   - **Lifetime**: Automatically dropped when the session ends or procedure completes.
+
+2. **View**:
+   - **Scope**: Permanent (until explicitly dropped).
+   - **Storage**: Query definition only (no data storage).
+   - **Usage**: Simplifying complex queries, abstraction, and data access restriction.
+   - **Lifetime**: Exists until explicitly dropped.
+
+3. **Stored Procedure**:
+   - **Scope**: Permanent (until explicitly dropped).
+   - **Storage**: SQL code and logic.
+   - **Usage**: Encapsulating complex logic, batch operations, and dynamic SQL execution.
+   - **Lifetime**: Exists until explicitly dropped.
+
+4. **Cached Table**:
+   - **Scope**: Temporary (in-memory).
+   - **Storage**: In-memory storage.
+   - **Usage**: Improving performance by caching frequently accessed data.
+   - **Lifetime**: Exists until the cache is invalidated or cleared.
+
+5. **Actual Table**:
+   - **Scope**: Permanent (until explicitly dropped).
+   - **Storage**: Persistent data storage on disk.
+   - **Usage**: Storing persistent data.
+   - **Lifetime**: Exists until explicitly dropped.
+
+---
+
+## Remaining Concepts to Cover
+
+1. **Advanced Query Techniques**
    - EXISTS and NOT EXISTS
      - Overview
      - Syntax
@@ -1361,11 +1583,11 @@ While SELF JOINs are powerful for specific use cases, using `DISTINCT` or `GROUP
      - Syntax
      - Practice Question
 
-4. **Performance Tuning**
+2. **Performance Tuning**
    - Overview
    - Practice Question
 
-5. **Database Design**
+3. **Database Design**
     - Normalization and Denormalization
       - Overview
       - Practice Question
@@ -1373,7 +1595,7 @@ While SELF JOINs are powerful for specific use cases, using `DISTINCT` or `GROUP
       - Overview
       - Practice Question
 
-6. **Security**
+4. **Security**
     - GRANT and REVOKE Privileges
       - Overview
       - Syntax
@@ -1385,31 +1607,31 @@ While SELF JOINs are powerful for specific use cases, using `DISTINCT` or `GROUP
       - Overview
       - Practice Question
 
-7. **Backup and Restore**
+5. **Backup and Restore**
     - Overview
     - Practice Question
 
-8. **JSON and XML Data**
+6. **JSON and XML Data**
     - Storing and Querying JSON and XML Data
       - Overview
       - Syntax
       - Practice Question
 
-9. **Case Studies and Real-World Scenarios**
+7. **Case Studies and Real-World Scenarios**
     - Practical Applications
     - Complex Query Examples
 
-10. **Transactions**
+8. **Transactions**
    - Overview
    - Syntax
    - Practice Question
 
-11. **Triggers**
+9. **Triggers**
    - Overview
    - Syntax
    - Practice Question
 
-12. **User-Defined Functions**
+10. **User-Defined Functions**
    - Overview
    - Syntax
    - Practice Question
