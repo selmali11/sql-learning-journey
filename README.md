@@ -30,6 +30,11 @@ This repo documents my journey to learn SQL from beginner to advanced utilizing 
 24. [Concept 24: Pivot Tables](#concept-24-pivot-tables)
 25. [Concept 25: Temporary Tables](#concept-25-temporary-tables)
 26. [Concept 26: Data Types](#concept-26-data-types)
+27. [Concept 27: Advanced Query Techniques - EXISTS and NOT EXISTS](#concept-27-advanced-query-techniques---exists-and-not-exists)
+28. [Concept 28: Performance Tuning](#concept-28-performance-tuning)
+29. [Concept 29: Database Design - Normalization and Denormalization](#concept-29-database-design---normalization-and-denormalization)
+30. [Concept 30: Database Design - Keys (Primary, Foreign, Composite)](#concept-30-database-design---keys-primary-foreign-composite)
+
 
 ## Concepts Covered
 
@@ -1144,6 +1149,176 @@ Validity of User's Answer:
 
 
 ---
+
+
+### Concept 27: Advanced Query Techniques - EXISTS and NOT EXISTS
+
+**Overview**:  
+The `EXISTS` and `NOT EXISTS` operators are used to test for the existence of any record in a subquery. `EXISTS` returns true if the subquery returns one or more records, while `NOT EXISTS` returns true if the subquery returns no records.
+
+**Syntax**:
+```sql
+SELECT column1, column2, ...
+FROM table_name
+WHERE EXISTS (SELECT 1 FROM table_name WHERE condition);
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE NOT EXISTS (SELECT 1 FROM table_name WHERE condition);
+```
+
+**Practice Question**:  
+Write a SQL query to find all employees who do not belong to any department. Use the `NOT EXISTS` operator.
+
+**User's Answer**:
+```sql
+select a.employee_id, a.name from employees a where not exists (select 1 from departments d where d.department_id = a.department_id);
+```
+
+**Provided Answer**:
+```sql
+SELECT e.employee_id, e.name
+FROM employees e
+WHERE NOT EXISTS (SELECT 1 FROM departments d WHERE d.department_id = e.department_id);
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Concept 28: Performance Tuning
+
+**Overview**:  
+Performance tuning involves optimizing SQL queries and database performance to ensure efficient data retrieval and processing. It includes techniques such as indexing, query optimization, and analyzing execution plans.
+
+**Key Techniques**:
+
+1. **Indexing**: Creating indexes on columns that are frequently used in search conditions, joins, and sorting operations can significantly improve query performance.
+
+2. **Query Optimization**: Writing efficient SQL queries, avoiding unnecessary computations, and using appropriate join types.
+
+3. **Execution Plans**: Analyzing execution plans to identify performance bottlenecks and optimize query execution paths.
+
+**Practice Question**:  
+Write a SQL query to create an index on the `department_id` column of the 'employees' table, and then retrieve employee details (employee_id, name, department_id) from the 'employees' table and join it with the 'departments' table on 'department_id'. Ensure that the query is optimized for performance.
+
+**User's Answer**:
+```sql
+CREATE INDEX idx_department_id ON employees(department_id);
+
+SELECT e.employee_id, e.name, d.department_id
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id;
+```
+
+**Provided Answer**:
+```sql
+CREATE INDEX idx_department_id ON employees(department_id);
+
+SELECT e.employee_id, e.name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id;
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Concept 29: Database Design - Normalization and Denormalization
+
+**Overview**:  
+Database design involves organizing data in a way that reduces redundancy and improves data integrity. Normalization and denormalization are two key techniques used in database design.
+
+- **Normalization**: The process of structuring a relational database to minimize redundancy and improve data integrity. It involves dividing large tables into smaller tables and defining relationships between them.
+- **Denormalization**: The process of combining normalized tables to improve query performance at the cost of redundancy.
+
+**Practice Question**:  
+Write a SQL query to create two normalized tables, 'employees' and 'departments'. The 'employees' table should have columns 'employee_id' (integer, primary key), 'name' (varchar), and 'department_id' (integer). The 'departments' table should have columns 'department_id' (integer, primary key) and 'department_name' (varchar).
+
+**User's Answer**:
+```sql
+create table employees (
+    employee_id integer primary key,
+    name varchar(50),
+    department_id integer
+);
+
+create table departments (
+    department_id integer primary key,
+    department_name varchar(50)
+);
+```
+
+**Provided Answer**:
+```sql
+CREATE TABLE employees (
+    employee_id INTEGER PRIMARY KEY,
+    name VARCHAR(50),
+    department_id INTEGER
+);
+
+CREATE TABLE departments (
+    department_id INTEGER PRIMARY KEY,
+    department_name VARCHAR(50)
+);
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Concept 30: Database Design - Keys (Primary, Foreign, Composite)
+
+**Overview**:  
+Keys are essential in database design to uniquely identify rows in a table and establish relationships between tables.
+
+- **Primary Key**: A unique identifier for each record in a table. A table can have only one primary key.
+- **Foreign Key**: A field in one table that uniquely identifies a row in another table. It establishes a relationship between the two tables.
+- **Composite Key**: A primary key composed of two or more columns to uniquely identify a record.
+
+**Practice Question**:  
+Write a SQL query to modify the 'employees' table to add a foreign key constraint on 'department_id' that references the 'department_id' in the 'departments' table.
+
+**User's Answer**:
+```sql
+CREATE TABLE employees (
+    employee_id INTEGER PRIMARY KEY,
+    name VARCHAR(50),
+    department_id INTEGER,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+```
+
+**Provided Answer**:
+```sql
+CREATE TABLE employees (
+    employee_id INTEGER PRIMARY KEY,
+    name VARCHAR(50),
+    department_id INTEGER,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
 ## User Inquiries
 
 ### Inquiry 1: Can you explain a little bit more how indexes work? Are indexes similar to hash tables?
@@ -1569,35 +1744,39 @@ CREATE TABLE table_name (
 
 ---
 
+### Inquiry 6: Can I create an index on `department_id` and use a SELECT statement in the same query?
+
+**Response to Inquiry**:
+
+In SQL, creating an index and using a `SELECT` statement are typically done in separate operations. Creating an index is a one-time operation that optimizes the database for faster data retrieval, and it is not usually combined with a `SELECT` statement within the same query.
+
+Here is how you can create an index on `department_id` and then use a `SELECT` statement to retrieve data:
+
+1. **Create an Index on `department_id`**:
+   ```sql
+   CREATE INDEX idx_department_id ON employees(department_id);
+   ```
+
+   - **Purpose**: This index will optimize queries that filter or join on the `department_id` column, improving performance.
+
+2. **Retrieve Data Using the Index**:
+   ```sql
+   SELECT e.employee_id, e.name, e.department_id, d.department_name
+   FROM employees e
+   JOIN departments d ON e.department_id = d.department_id;
+   ```
+
+   - **Purpose**: This query retrieves employee details and joins the `employees` table with the `departments` table on the `department_id` column.
+
+**Summary**:
+- **Index Creation**: The `CREATE INDEX` statement is used to create an index on the `department_id` column, which is a one-time operation.
+- **Data Retrieval**: The `SELECT` statement retrieves data, benefiting from the index to optimize performance.
+
+---
+
 ## Remaining Concepts to Cover
 
-1. **Advanced Query Techniques**
-   - EXISTS and NOT EXISTS
-     - Overview
-     - Syntax
-     - Practice Question
-   - CASE Statements
-     - Overview
-     - Syntax
-     - Practice Question
-   - COALESCE and NULLIF
-     - Overview
-     - Syntax
-     - Practice Question
-
-2. **Performance Tuning**
-   - Overview
-   - Practice Question
-
-3. **Database Design**
-    - Normalization and Denormalization
-      - Overview
-      - Practice Question
-    - Keys (Primary, Foreign, Composite)
-      - Overview
-      - Practice Question
-
-4. **Security**
+1. **Security**
     - GRANT and REVOKE Privileges
       - Overview
       - Syntax
@@ -1609,33 +1788,31 @@ CREATE TABLE table_name (
       - Overview
       - Practice Question
 
-5. **Backup and Restore**
+2. **Backup and Restore**
     - Overview
     - Practice Question
 
-6. **JSON and XML Data**
+3. **JSON and XML Data**
     - Storing and Querying JSON and XML Data
       - Overview
       - Syntax
       - Practice Question
 
-7. **Case Studies and Real-World Scenarios**
+4. **Case Studies and Real-World Scenarios**
     - Practical Applications
     - Complex Query Examples
 
-8. **Transactions**
+5. **Transactions**
    - Overview
    - Syntax
    - Practice Question
 
-9. **Triggers**
+6. **Triggers**
    - Overview
    - Syntax
    - Practice Question
 
-10. **User-Defined Functions**
+7. **User-Defined Functions**
    - Overview
    - Syntax
    - Practice Question
-
----
