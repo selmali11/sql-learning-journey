@@ -1320,7 +1320,7 @@ Validity of User's Answer:
 
 ---
 
-### Concept 32: Case Studies and Real-World Scenarios
+### Concept 31: Case Studies and Real-World Scenarios
 
 **Overview**:  
 Case studies and real-world scenarios provide practical applications of SQL concepts. They demonstrate how to solve complex problems using SQL queries and help you understand how to apply SQL in real-world situations.
