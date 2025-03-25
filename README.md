@@ -34,7 +34,8 @@ This repo documents my journey to learn SQL from beginner to advanced utilizing 
 28. [Concept 28: Performance Tuning](#concept-28-performance-tuning)
 29. [Concept 29: Database Design - Normalization and Denormalization](#concept-29-database-design---normalization-and-denormalization)
 30. [Concept 30: Database Design - Keys (Primary, Foreign, Composite)](#concept-30-database-design---keys-primary-foreign-composite)
-31. [Concept 31: Case Studies and Real-World Scenarios](#concept-31-case-studies-and-real-world-scenarios)
+31. [Concept 31: User-Defined Functions (UDFs)](#concept-31-user-defined-functions-udfs)
+32. [Concept 32: Case Studies and Real-World Scenarios](#concept-32-case-studies-and-real-world-scenarios)
 
 
 ## Concepts Covered
@@ -1320,7 +1321,65 @@ Validity of User's Answer:
 
 ---
 
-### Concept 31: Case Studies and Real-World Scenarios
+### Concept 31: User-Defined Functions (UDFs)
+
+**Overview**:  
+User-Defined Functions (UDFs) are functions created by users to perform specific tasks. They can accept parameters, perform actions, and return results. There are two types of UDFs: scalar functions (return a single value) and table-valued functions (return a table).
+
+**Syntax for Scalar Function**:
+```sql
+CREATE FUNCTION function_name (@parameter datatype)
+RETURNS return_datatype
+AS
+BEGIN
+    -- SQL statements
+    RETURN value;
+END;
+```
+
+**Syntax for Table-Valued Function**:
+```sql
+CREATE FUNCTION function_name (@parameter datatype)
+RETURNS TABLE
+AS
+RETURN
+(
+    -- SQL query returning a table
+);
+```
+
+**Practice Question**:  
+Write a SQL scalar function named 'GetEmployeeFullName' that accepts 'first_name' and 'last_name' as parameters and returns the full name concatenated with a space between them.
+
+**User's Answer**:
+```sql
+CREATE FUNCTION GetEmployeeFullName (@first_name varchar(50), @last_name varchar(50))
+RETURNS varchar(101)
+AS
+BEGIN
+    RETURN @first_name + ' ' + @last_name;
+END;
+```
+
+**Provided Answer**:
+```sql
+CREATE FUNCTION GetEmployeeFullName (@first_name VARCHAR(50), @last_name VARCHAR(50))
+RETURNS VARCHAR(101)
+AS
+BEGIN
+    RETURN @first_name + ' ' + @last_name;
+END;
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Concept 32: Case Studies and Real-World Scenarios
 
 **Overview**:  
 Case studies and real-world scenarios provide practical applications of SQL concepts. They demonstrate how to solve complex problems using SQL queries and help you understand how to apply SQL in real-world situations.
@@ -1879,22 +1938,7 @@ Here is how you can create an index on `department_id` and then use a `SELECT` s
 
 ## Remaining Concepts to Cover
 
-1. **Transactions**
-   - Overview
-   - Syntax
-   - Practice Question
-
-2. **Triggers**
-   - Overview
-   - Syntax
-   - Practice Question
-
-3. **User-Defined Functions**
-   - Overview
-   - Syntax
-   - Practice Question
-
-4. **Security**
+1. **Security**
     - GRANT and REVOKE Privileges
       - Overview
       - Syntax
@@ -1906,12 +1950,24 @@ Here is how you can create an index on `department_id` and then use a `SELECT` s
       - Overview
       - Practice Question
 
-5. **Backup and Restore**
+2. **Backup and Restore**
     - Overview
     - Practice Question
 
-6. **JSON and XML Data**
+3. **JSON and XML Data**
     - Storing and Querying JSON and XML Data
       - Overview
       - Syntax
       - Practice Question
+
+4. **Transactions**
+   - Overview
+   - Syntax
+   - Practice Question
+
+5. **Triggers**
+   - Overview
+   - Syntax
+   - Practice Question
+
+---
