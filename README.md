@@ -34,6 +34,7 @@ This repo documents my journey to learn SQL from beginner to advanced utilizing 
 28. [Concept 28: Performance Tuning](#concept-28-performance-tuning)
 29. [Concept 29: Database Design - Normalization and Denormalization](#concept-29-database-design---normalization-and-denormalization)
 30. [Concept 30: Database Design - Keys (Primary, Foreign, Composite)](#concept-30-database-design---keys-primary-foreign-composite)
+31. [Concept 31: Case Studies and Real-World Scenarios](#concept-31-case-studies-and-real-world-scenarios)
 
 
 ## Concepts Covered
@@ -1319,6 +1320,108 @@ Validity of User's Answer:
 
 ---
 
+### Concept 32: Case Studies and Real-World Scenarios
+
+**Overview**:  
+Case studies and real-world scenarios provide practical applications of SQL concepts. They demonstrate how to solve complex problems using SQL queries and help you understand how to apply SQL in real-world situations.
+
+---
+
+### Case Study 1: Employee Management System
+
+**Scenario**:  
+You are tasked with creating an employee management system for a company. The system should store information about employees, departments, and the projects they work on. You need to write SQL queries to perform various tasks such as retrieving employee details, assigning employees to projects, and generating reports.
+
+#### Tables:
+
+1. **employees**
+   - Columns: `employee_id` (integer, primary key), `name` (varchar), `department_id` (integer)
+
+2. **departments**
+   - Columns: `department_id` (integer, primary key), `department_name` (varchar)
+
+3. **projects**
+   - Columns: `project_id` (integer, primary key), `project_name` (varchar)
+
+4. **employee_projects**
+   - Columns: `employee_id` (integer), `project_id` (integer)
+
+---
+
+**Practice Question 1**:  
+Write a SQL query to retrieve the names of all employees working on a project named 'Project X'.
+
+**User's Answer**:
+```sql
+WITH employee_project_cte AS (
+    SELECT employee_projects.employee_id, projects.project_name 
+    FROM employee_projects
+    INNER JOIN projects 
+    ON employee_projects.project_id = projects.project_id
+)
+SELECT e.name 
+FROM employees e 
+INNER JOIN employee_project_cte  
+ON e.employee_id = employee_project_cte.employee_id
+WHERE employee_project_cte.project_name = 'Project X';
+```
+
+**Provided Answer**:
+```sql
+WITH employee_project_cte AS (
+    SELECT ep.employee_id, p.project_name 
+    FROM employee_projects ep
+    INNER JOIN projects p 
+    ON ep.project_id = p.project_id
+)
+SELECT e.name 
+FROM employees e 
+INNER JOIN employee_project_cte cte 
+ON e.employee_id = cte.employee_id
+WHERE cte.project_name = 'Project X';
+```
+
+Validity of User's Answer:
+
+✅ Correct
+☐ Not Correct
+☐ Almost Correct
+
+---
+
+### Case Study 2: E-commerce System
+
+**Scenario**:  
+You are responsible for managing the database of an e-commerce system. The system should store information about products, customers, and orders. You need to write SQL queries to manage inventory, track customer orders, and generate sales reports.
+
+#### Tables:
+
+1. **products**
+   - Columns: `product_id` (integer, primary key), `product_name` (varchar), `price` (decimal)
+
+2. **customers**
+   - Columns: `customer_id` (integer, primary key), `customer_name` (varchar), `email` (varchar)
+
+3. **orders**
+   - Columns: `order_id` (integer, primary key), `customer_id` (integer), `order_date` (datetime)
+
+4. **order_items**
+   - Columns: `order_id` (integer), `product_id` (integer), `quantity` (integer)
+
+---
+
+**Practice Question 2**:  
+Write a SQL query to generate a sales report showing the total sales amount for each product in the 'products' table.
+
+Please provide your answer below:
+
+---
+
+**User's Answer**: (Please input your answer here)
+
+---
+
+
 ## User Inquiries
 
 ### Inquiry 1: Can you explain a little bit more how indexes work? Are indexes similar to hash tables?
@@ -1776,7 +1879,22 @@ Here is how you can create an index on `department_id` and then use a `SELECT` s
 
 ## Remaining Concepts to Cover
 
-1. **Security**
+1. **Transactions**
+   - Overview
+   - Syntax
+   - Practice Question
+
+2. **Triggers**
+   - Overview
+   - Syntax
+   - Practice Question
+
+3. **User-Defined Functions**
+   - Overview
+   - Syntax
+   - Practice Question
+
+4. **Security**
     - GRANT and REVOKE Privileges
       - Overview
       - Syntax
@@ -1788,31 +1906,12 @@ Here is how you can create an index on `department_id` and then use a `SELECT` s
       - Overview
       - Practice Question
 
-2. **Backup and Restore**
+5. **Backup and Restore**
     - Overview
     - Practice Question
 
-3. **JSON and XML Data**
+6. **JSON and XML Data**
     - Storing and Querying JSON and XML Data
       - Overview
       - Syntax
       - Practice Question
-
-4. **Case Studies and Real-World Scenarios**
-    - Practical Applications
-    - Complex Query Examples
-
-5. **Transactions**
-   - Overview
-   - Syntax
-   - Practice Question
-
-6. **Triggers**
-   - Overview
-   - Syntax
-   - Practice Question
-
-7. **User-Defined Functions**
-   - Overview
-   - Syntax
-   - Practice Question
